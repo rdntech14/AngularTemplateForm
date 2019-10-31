@@ -1,27 +1,134 @@
-# AngularTemplateForm
+Angular Forms
+=====
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.9.
+Angular has two types of Forms 
 
-## Development server
+1) Template Driven Forms
+2) Reactive Forms
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Template Driven Forms
 
-## Code scaffolding
+*Note : 
+we need to import FormsModule for template driver forms
+we need to import ReactiveFroms for Reactive froms*
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+to access the form values, we need to use
 
-## Build
+1) We need to create form refernce using template reference varilable (#userName) assiging to ngForm. 
+Templete reference varialble have "value" property that will have all form control values. 
+Here input tag is a form control that user wants to track. 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+2) ngModel directive has to be added to form controls that needs to be tracked and must have name property.
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+ngForm is used.
+ngSubmit is used.
+ngModel will be used to send data from view to .ts.
 
-## Running end-to-end tests
+##Data Binding to variables
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Steps:
 
-## Further help
+1) use ngForm directive at form tag and assign it to reference variable
+2) pass form refernce varilable to click event method
+3) add name properties to input fields ( input, select checkbox, textbox whateven can collect user inputs)
+4) add ngModel to the input tag whose values need to be sent to .ts file.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```
+<!-- ngModel - DataBinding to variables -->
+
+<form (ngSubmit)="onSubmit(myForm)" #myForm="ngForm">
+  <input type="text" name=username ngModel><br />
+  <input type="text" name=password ngModel><br />
+  <button type="submit" class="btn btn-primary">Submit</button><br />
+</form>
+
+```
+.ts file
+```
+
+  onSubmit(myForm) {
+    console.log(myForm);
+    console.log(myForm.value.username);
+  }
+  
+  
+```
+
+##Data Binding to model class object variables
+
+```
+<!-- ngModel - DataBind to model class object variables -->
+
+<form (ngSubmit)="onSubmit1(myForm1)" #myForm1="ngForm">
+  <input type="text" name="username1" [(ngModel)]="userO.usr"><br />
+  <input type="text" name="password1" [(ngModel)]="userO.pwd"><br />
+  <button type="submit" class="btn btn-primary">Submit</button><br />
+</form>
+
+```
+.ts file
+  
+```
+export class AppComponent {
+
+  userO = new User();
+  userO = new User();
+  
+  onSubmit1(myForm1:NgForm) {
+    console.log(myForm1.value.username1);
+    console.log(this.userO.usr);
+  }
+}
+
+export class User{
+    usr:string;
+    pwd:string;
+}
+```
+
+**Form Control & Form Group**
+
+Just as a form control instance gives you control over a single input field, a form group instance tracks the form state of a group of form control instances (for example, a form). Each control in a form group instance is tracked by name when creating the form group.
+
+
+
+**Tracking State and Validitiy**
+
+Video : https://www.youtube.com/watch?v=WyWJwR0FJV0&list=PLC3y8-rFHvwhwL-XH04cHOpJnkgRKykFi&index=7
+
+to get the state of DOM, Angular provides few classes along with properties
+
+![Alt text](/ControlState.png?raw=true "Optional Title")
+
+![Alt text](/ngModelStateClassAndProperty.png?raw=true "Optional Title")
+
+to get reference of DOM element, add template reference variable (example  #trvName)
+
+```
+<input type="text" name="username" [(ngModel)]="employee.firstname" #trvName>
+{{  trvName.class }}
+```
+This will show few classes from above list 
+
+In order to get access to the properties, we need to assign ngModel to template refernece variable
+
+```
+<input type="text" name="username" [(ngModel)]="employee.firstname" #trvName="ngModel">
+{{  trvName.untouched }}
+```
+this may return true or false
+
+#Steps for Template Driven Form
+
+1) Add `#myForm="ngForm"` to form tag 
+2) Element must have ngModel directive
+3) Element must have name properties
+
+```
+<input type="text" name="username" ngModel>
+```
+We may add submit method following ways:
+1)At form level `<form (ngSubmit)="addToCartMethod()" #myForm="ngForm">`  2) or at submit button level `<button type="submit" (click)="addToCartMethod()">Add to Cart</button>`
+
+
